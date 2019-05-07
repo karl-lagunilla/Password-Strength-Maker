@@ -94,41 +94,44 @@ body {
 </div>
 				
 <script>
-var myInput = document.getElementById("psw");
+var pwInput = document.getElementById("psw");
 var letter = document.getElementById("letter");
 var capital = document.getElementById("capital");
 var number = document.getElementById("number");
 var length = document.getElementById("length");
 
-// When the user clicks on the password field, show the message box
-myInput.onfocus = function() {
-  document.getElementById("message").style.display = "block";
+// When the user clicks on the password field, the password requirement box shows
+pwInput.onfocus = function() {
+    document.getElementById("message").style.display = "block";
+    strengthBar.value = 0;
 }
 
-// When the user clicks outside of the password field, hide the message box
-myInput.onblur = function() {
+//When the user clicks outside of the password textbox, the password requirement box closes
+pwInput.onblur = function() {
   document.getElementById("message").style.display = "none";
 }
 
-// When the user starts to type something inside the password field
-myInput.onkeyup = function() {
-  // Validate lowercase letters
-  var strengthBar = document.getElementById("strength")
-  var strength = 0;
+// This function works by reading input after every key up. After each key up the input value
+// in side the text box is evaluated and changes the CSS style in the messagebox below
+// the password text box as well as controls the strength bar
+pwInput.onkeyup = function() {
 
-  var lowerCaseLetters = /[a-z]/g;
-  if(myInput.value.match(lowerCaseLetters)) {  
-    letter.classList.remove("invalid");
-    letter.classList.add("valid");
+  var strength = 0;
+  var strengthBar = document.getElementById("strength") // Strength value for strength bar
+
+  var lowerCaseLetters = /[a-z]/g; // Grep condition for comparison
+  if(pwInput.value.match(lowerCaseLetters)) {  
+    letter.classList.remove("invalid"); // Removing CSS red style and X mark
+    letter.classList.add("valid"); // Activates CSS green style and check mark
     strength += 1;
   } else {
-    letter.classList.remove("valid");
-    letter.classList.add("invalid");
+    letter.classList.remove("valid"); // Removes CSS green style and check mark
+    letter.classList.add("invalid"); // Activates CSS red style and X mark
   }
   
-  // Validate capital letters
+  // Validate psw for capital letter(s)
   var upperCaseLetters = /[A-Z]/g;
-  if(myInput.value.match(upperCaseLetters)) {  
+  if(pwInput.value.match(upperCaseLetters)) {  
     capital.classList.remove("invalid");
     capital.classList.add("valid");
     strength += 1;
@@ -137,9 +140,9 @@ myInput.onkeyup = function() {
     capital.classList.add("invalid");
   }
 
-  // Validate numbers
+  // Validate psw for number(s)
   var numbers = /[0-9]/g;
-  if(myInput.value.match(numbers)) {  
+  if(pwInput.value.match(numbers)) {  
     number.classList.remove("invalid");
     number.classList.add("valid");
     strength += 1;
@@ -148,8 +151,8 @@ myInput.onkeyup = function() {
     number.classList.add("invalid");
   }
   
-  // Validate length
-  if(myInput.value.length >= 8) {
+  // Validate psw for minimum length
+  if(pwInput.value.length >= 8) {
     length.classList.remove("invalid");
     length.classList.add("valid");
     strength += 1;
@@ -157,23 +160,24 @@ myInput.onkeyup = function() {
     length.classList.remove("valid");
     length.classList.add("invalid");
   }
+    // Switch case that changes strength bar value based on strength value
+switch (strength) {
+    case 0:
+          strengthBar.value = 0; //Strength bar will be empty if no text matches on key up
+          break
+    case 1:
+          strengthBar.value = 25;
+          break
+    case 2:
+          strengthBar.value = 50;
+          break
+    case 3:
+          strengthBar.value = 75;
+          break
+    case 4:
+          strengthBar.value = 100;
+          break
 
-  switch(strength){
-      case 0:
-            strengthBar.value = 20;
-            break
-      case 1:
-            strengthBar.value = 40;
-            break
-      case 2:
-            strengthBar.value = 60;
-            break
-      case 3:
-            strengthBar.value = 80;
-            break
-      case 4:
-            strengthBar.value = 100;
-            break
   }
 }
 </script>
